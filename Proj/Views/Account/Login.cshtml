@@ -1,0 +1,47 @@
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container mt-5">
+    <h2>Login</h2>
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+    }
+    <form method="post" action="/Account/Login">
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <div class="input-group">
+                <input type="password" class="form-control" id="password" name="password" required>
+                <span class="input-group-text" id="showPassword" style="cursor: pointer;">
+                    <i class="fas fa-eye"></i>
+                </span>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+</div>
+
+<!-- Add FontAwesome if not already included -->
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+<script>
+    // JavaScript to toggle password visibility
+    const showPasswordIcon = document.getElementById('showPassword');
+    const passwordInput = document.getElementById('password');
+
+    showPasswordIcon.addEventListener('click', () => {
+        // Toggle the type attribute between 'password' and 'text'
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            showPasswordIcon.innerHTML = '<i class="fas fa-eye-slash"></i>';  // Change icon to eye-slash
+        } else {
+            passwordInput.type = 'password';
+            showPasswordIcon.innerHTML = '<i class="fas fa-eye"></i>';  // Change icon back to eye
+        }
+    });
+</script>

@@ -1,0 +1,116 @@
+@{
+ViewData["Title"] = "Manage Categories";
+}
+
+<div class="container mt-4">
+    <h1>Manage Categories</h1>
+
+    <!-- Button to Add Category -->
+    <button class="btn btn-primary mb-3" id="addCategoryBtn">
+        <i class="fas fa-plus"></i> Add Category
+    </button>
+
+    <!-- Add Category Form (Initially hidden) -->
+    <div id="addCategoryForm" class="d-none">
+        <div class="overlay"></div> <!-- Background blur effect -->
+
+        <div class="form-container">
+            <h3>Add New Category</h3>
+            <form method="post" asp-action="AddCategory" asp-controller="Admin">
+                <div class="form-group">
+                    <label for="Name">Category Name</label>
+                    <input type="text" class="form-control" id="Name" name="Name" required />
+                </div>
+                <div class="form-group mt-3">
+                    <button type="submit" class="btn btn-success">Add Category</button>
+                    <button type="button" class="btn btn-secondary" id="cancelAddCategory">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Category Form (Initially hidden) -->
+    <div id="editCategoryForm" class="d-none">
+        <div class="overlay"></div>
+
+        <div class="form-container">
+            <h3>Edit Category</h3>
+            <form method="post" asp-action="EditCategory" asp-controller="Admin">
+                <input type="hidden" id="editCategoryId" name="Id" />
+                <div class="form-group">
+                    <label for="editName">Category Name</label>
+                    <input type="text" class="form-control" id="editName" name="Name" required />
+                </div>
+                <div class="form-group mt-3">
+                    <button type="submit" class="btn btn-success">Save Category</button>
+                    <button type="button" class="btn btn-secondary" id="cancelEditCategory">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Categories Table -->
+    @if (ViewBag.Categories == null )
+    {
+    <p>No categories available.</p>
+    }
+    else
+    {
+    <table class="table table-bordered mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var category in ViewBag.Categories)
+        {
+        <tr id="category-@category.Id">
+            <td>@category.Id</td>
+            <td>@category.Name</td>
+            <td>
+                <!-- Edit Button -->
+                <button class="btn btn-warning btn-sm" onclick="editCategory(@category.Id, '@category.Name')">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+
+                <!-- Delete Button -->
+                <form method="post" asp-action="DeleteCategory" asp-controller="Admin" asp-route-id="@category.Id" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+        }
+        </tbody>
+    </table>
+    }
+</div>
+
+<!-- JavaScript for Add, Edit, and Delete Category -->
+<script>
+    // Show and hide the Add Category form
+    document.getElementById("addCategoryBtn").addEventListener("click", function () {
+        document.getElementById("addCategoryForm").classList.remove("d-none");
+    });
+
+    // Hide the Add Category form when "Cancel" is clicked
+    document.getElementById("cancelAddCategory").addEventListener("click", function () {
+        document.getElementById("addCategoryForm").classList.add("d-none");
+    });
+
+    // Show the Edit Category form and populate fields
+    function editCategory(id, name) {
+        document.getElementById("editCategoryForm").classList.remove("d-none");
+        document.getElementById("editCategoryId").value = id;
+        document.getElementById("editName").value = name;
+    }
+
+    // Hide the Edit Category form when "Cancel" is clicked
+    document.getElementById("cancelEditCategory").addEventListener("click", function () {
+        document.getElementById("editCategoryForm").classList.add("d-none");
+    });
+</script>

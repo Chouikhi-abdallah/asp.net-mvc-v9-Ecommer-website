@@ -1,0 +1,40 @@
+@{
+    ViewBag.Title = "Manage Products";
+}
+
+<h2>Manage Products</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Product Name</th>
+        <th>Description</th> <!-- Added description column -->
+        <th>Price</th>
+        <th>Quantity</th> <!-- Added quantity column -->
+        <th>Category</th>
+        <th>Image</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var product in ViewBag.Products)
+    {
+        <tr>
+            <td>@product.Name</td>
+            <td>@product.Description</td> <!-- Display description -->
+            <td>@product.Price</td>
+            <td>@product.Quantity</td> <!-- Display quantity -->
+            <td>@product.Category.Name</td>
+            <td><img src="@product.ImagePath" width="50" height="50" /></td>
+            <td>
+                <form asp-action="DeleteProduct" method="post">
+                    <input type="hidden" name="id" value="@product.Id" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<a href="@Url.Action("AddProduct")" class="btn btn-success">Add New Product</a>
