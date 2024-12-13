@@ -222,5 +222,27 @@ namespace Proj.Controllers
             TempData["SuccessMessage"] = "Category deleted successfully!";
             return RedirectToAction("ManageCategory");
         }
+        public IActionResult ManageUsers()
+        {
+            var users = _context.Users.ToList();
+            return View(users); // Pass the list of users to the view
+        }
+
+        // Action to delete a user
+        public IActionResult DeleteUser(int id)
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return NotFound(); // Return a 404 error if the user is not found
+            }
+
+            _context.Users.Remove(user); // Remove the user from the database
+            _context.SaveChanges(); // Save changes
+
+            return RedirectToAction(nameof(ManageUsers)); // Redirect to the user list after deletion
+        }
+        
+        
     }
 }

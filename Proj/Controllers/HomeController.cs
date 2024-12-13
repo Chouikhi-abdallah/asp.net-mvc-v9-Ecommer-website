@@ -1,13 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
+using Proj.Models;
+using System.Linq;
+using Proj.Data;
 
 namespace Proj.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: /Home/Index
+        private readonly EcommerceDbContext _context;
+
+        public HomeController(EcommerceDbContext context)
+        {
+            _context = context;
+        }
+
+        // GET: Home/Index
         public IActionResult Index()
         {
-            return View(); // Returns the default View (Index.cshtml) for the Home controller
+            var products = _context.Products.ToList();
+            return View(products);
         }
     }
 }

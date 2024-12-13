@@ -78,6 +78,7 @@ namespace Proj.Controllers
             {
                 // Store user details in session
                 HttpContext.Session.SetString("UserId", user.Id.ToString());
+                HttpContext.Session.SetString("UserName",user.Name.ToString());
                 HttpContext.Session.SetString("UserRole", user.Role);
 
                 if (user.Role == "Admin")
@@ -86,7 +87,7 @@ namespace Proj.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Index", "Home"); // Redirect customers to the home page
+                    return RedirectToAction("CustomerHome", "Customer"); // Redirect customers to the home page
                 }
             }
 
