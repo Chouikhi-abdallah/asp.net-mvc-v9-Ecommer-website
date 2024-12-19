@@ -1,32 +1,53 @@
 @model Proj.Models.User
 
 @{
-    ViewData["Title"] = "Update Profile";
+ViewData["Title"] = "Update Profile";
 }
 
-<div class="container mt-4">
-    <h1>Update Profile</h1>
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="display-5 text-primary fw-bold">Update Profile</h1>
+        <p class="text-muted">Keep your profile information up to date.</p>
+    </div>
 
     @if (ViewBag.SuccessMessage != null)
     {
-        <div class="alert alert-success">
-            @ViewBag.SuccessMessage
-        </div>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fa fa-check-circle me-2"></i> @ViewBag.SuccessMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     }
 
-    <form method="post">
-        <div class="form-group">
-            <label for="Name">Name</label>
-            <input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" required />
+    <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+        <div class="card-body p-4">
+            <form method="post">
+                <!-- Name -->
+                <div class="form-group mb-3">
+                    <label for="Name" class="form-label fw-bold">Name</label>
+                    <input type="text" class="form-control rounded-pill px-3 py-2" id="Name" name="Name" value="@Model.Name" placeholder="Enter your full name" required />
+                </div>
+
+                <!-- Email -->
+                <div class="form-group mb-3">
+                    <label for="Email" class="form-label fw-bold">Email</label>
+                    <input type="email" class="form-control rounded-pill px-3 py-2" id="Email" name="Email" value="@Model.Email" placeholder="Enter your email address" required />
+                </div>
+
+                <!-- Password -->
+                <div class="form-group mb-4">
+                    <label for="Password" class="form-label fw-bold">New Password</label>
+                    <input type="password" class="form-control rounded-pill px-3 py-2" id="Password" name="Password" placeholder="Leave empty to keep the current password" />
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary rounded-pill py-2 fw-bold">Update Profile</button>
+                </div>
+            </form>
         </div>
-        <div class="form-group mt-3">
-            <label for="Email">Email</label>
-            <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" required />
-        </div>
-        <div class="form-group mt-3">
-            <label for="Password">New Password</label>
-            <input type="password" class="form-control" id="Password" name="Password" placeholder="Leave empty to keep the current password" />
-        </div>
-        <button type="submit" class="btn btn-primary mt-3">Update Profile</button>
-    </form>
+    </div>
 </div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
