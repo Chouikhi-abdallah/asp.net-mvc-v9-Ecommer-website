@@ -1,0 +1,76 @@
+@model Order
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Order Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .order-details {
+            margin-bottom: 20px;
+        }
+        .order-details strong {
+            display: inline-block;
+            width: 150px;
+        }
+        .order-items {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .order-items th, .order-items td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        .order-items th {
+            background-color: #f2f2f2;
+        }
+        .total {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Order #@Model.Id</h2>
+
+<div class="order-details">
+    <div><strong>Customer Name:</strong> @Model.User.Name</div>
+    <div><strong>Email:</strong> @Model.User.Email</div>
+    <div><strong>Status:</strong> @Model.OrderStatus</div>
+</div>
+
+<h3>Order Items:</h3>
+<table class="order-items">
+    <thead>
+    <tr>
+        <th>Product Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.OrderItems)
+    {
+        <tr>
+            <td>@item.Product.Name</td>
+            <td>@item.Quantity</td>
+            <td>@item.Product.Price</td>
+            <td>@(item.Quantity * item.Product.Price)</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<div class="total">
+    <strong>Total Amount: </strong>@Model.OrderItems.Sum(oi => oi.Quantity * oi.Product.Price)
+</div>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+@model IEnumerable<Proj.Models.Order>
+
+@{
+    ViewData["Title"] = "Order History";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="display-4 text-primary fw-bold">Order History</h1>
+        <p class="text-muted">Review the details of your past orders below.</p>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center py-5">
+            <i class="fa fa-box-open fa-3x text-primary mb-3"></i>
+            <h4>No Orders Found</h4>
+            <p class="text-muted">You haven’t placed any orders yet. Start shopping to create your first order!</p>
+            <a href="/Customer/CustomerHome" class="btn btn-primary mt-3">Shop Now</a>
+        </div>
+    }
+    else
+    {
+        @foreach (var order in Model)
+        {
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Order #@order.Id</h3>
+                        <span class="badge bg-light text-dark">@order.OrderStatus</span>
+                    </div>
+                    <p class="mb-0"><strong>Date:</strong> @order.OrderDate.ToString("yyyy-MM-dd HH:mm")</p>
+                    <p><strong>Total Amount:</strong> <span class="text-light">@order.TotalAmount.ToString("C")</span></p>
+                </div>
+                <div class="card-body">
+                    <h4 class="mb-3 text-muted">Order Items</h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th scope="col" class="text-center">Image</th>
+                                    <th scope="col">Product Name</th>
+                                    <th scope="col" class="text-center">Quantity</th>
+                                    <th scope="col" class="text-end">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in order.OrderItems)
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            @if (item.Product != null && !string.IsNullOrEmpty(item.Product.ImagePath))
+                                            {
+                                                <img src="@item.Product.ImagePath" alt="@item.Product.Name" class="img-fluid rounded" style="max-width: 100px; max-height: 100px;" />
+                                            }
+                                            else
+                                            {
+                                                <img src="https://via.placeholder.com/100" class="img-fluid rounded" alt="Product image" />
+                                            }
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold">@item.Product?.Name</span>
+                                        </td>
+                                        <td class="text-center fw-bold">@item.Quantity</td>
+                                        <td class="text-end text-primary fw-bold">@item.Price.ToString("C")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>

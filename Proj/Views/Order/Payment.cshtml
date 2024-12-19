@@ -1,0 +1,14 @@
+@{
+ViewData["Title"] = "Payment";
+var orderId = ViewBag.OrderId;
+var totalAmount = ViewBag.TotalAmount;
+}
+
+<h2>Choose Your Payment Method</h2>
+<p>Order ID: @orderId</p>
+<p>Total Amount: $@totalAmount</p>
+
+<div class="payment-options">
+    <a href="/Order/StripePayment?orderId=@orderId" class="btn btn-primary">Pay with Stripe</a>
+    <a href="/Order/Payment?orderId=@orderId" class="btn btn-secondary">Pay with PayPal</a>
+</div>

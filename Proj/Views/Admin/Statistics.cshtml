@@ -1,0 +1,144 @@
+@{
+ViewData["Title"] = "Admin Statistics";
+}
+
+<h1 class="text-center mt-4">Admin Statistics</h1>
+
+<div class="row mt-4">
+    <!-- Total Orders Card -->
+    <div class="col-md-3">
+        <div class="card bg-gradient-primary text-white shadow-lg">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Orders</h5>
+                <p class="card-text">@ViewBag.TotalOrders</p>
+            </div>
+        </div>
+    </div>
+    <!-- Total Income Card -->
+    <div class="col-md-3">
+        <div class="card bg-gradient-success text-white shadow-lg">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Income</h5>
+                <p class="card-text">$@ViewBag.TotalIncome</p>
+            </div>
+        </div>
+    </div>
+    <!-- Total Products Card -->
+    <div class="col-md-3">
+        <div class="card bg-gradient-info text-white shadow-lg">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Products</h5>
+                <p class="card-text">@ViewBag.TotalProducts</p>
+            </div>
+        </div>
+    </div>
+    <!-- Out of Stock Products Card -->
+    <div class="col-md-3">
+        <div class="card bg-gradient-danger text-white shadow-lg">
+            <div class="card-body text-center">
+                <h5 class="card-title">Out of Stock Products</h5>
+                <p class="card-text">@ViewBag.OutOfStockProducts.Count</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Best Selling Products -->
+<h2 class="mt-4">Best Selling Products</h2>
+<table class="table table-striped table-bordered table-hover mt-3">
+    <thead class="bg-light">
+    <tr>
+        <th>Product Name</th>
+        <th>Total Sold</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var product in ViewBag.BestSellingProducts)
+    {
+    <tr>
+        <td>@product.ProductName</td>
+        <td>@product.TotalSold</td>
+    </tr>
+    }
+    </tbody>
+</table>
+
+<!-- Products Out of Stock -->
+<h2 class="mt-4">Products Out of Stock</h2>
+<table class="table table-striped table-bordered table-hover mt-3">
+    <thead class="bg-light">
+    <tr>
+        <th>Product Name</th>
+        <th>Product ID</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var product in ViewBag.OutOfStockProducts)
+    {
+    <tr>
+        <td>@product.Name</td>
+        <td>@product.Id</td>
+    </tr>
+    }
+    </tbody>
+</table>
+
+<!-- Add custom styles -->
+<style>
+    .card {
+        margin-bottom: 20px;
+        border-radius: 10px;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .card-text {
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    table th, table td {
+        text-align: center;
+        font-size: 1.1rem;
+        padding: 10px;
+    }
+
+    table thead {
+        background-color: #f8f9fa;
+        font-weight: bold;
+    }
+
+    table tbody tr:hover {
+        background-color: #f1f1f1;
+        transition: background-color 0.3s ease;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .bg-gradient-primary {
+        background: linear-gradient(to right, #4e73df, #224abe);
+    }
+
+    .bg-gradient-success {
+        background: linear-gradient(to right, #1cc88a, #17a673);
+    }
+
+    .bg-gradient-info {
+        background: linear-gradient(to right, #36b9cc, #20c997);
+    }
+
+    .bg-gradient-danger {
+        background: linear-gradient(to right, #e74a3b, #e03a2f);
+    }
+</style>

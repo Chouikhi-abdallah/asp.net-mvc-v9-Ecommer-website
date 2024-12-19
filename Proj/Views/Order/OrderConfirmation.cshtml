@@ -1,0 +1,124 @@
+@{
+    ViewData["Title"] = "Order Confirmation";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Order Confirmation</h2>
+
+    <!-- Success Alert -->
+    <div class="alert alert-success">
+        <h4>Your order has been placed successfully!</h4>
+        <p><strong>Order ID:</strong> @Model.Id</p>
+        <p><strong>Order Status:</strong> <span class="badge @GetOrderStatusBadgeClass(Model.OrderStatus)">@Model.OrderStatus</span></p>
+        <p><strong>Total Amount:</strong> $@Model.TotalAmount</p>
+    </div>
+
+    <!-- Shipping Details -->
+    <h3 class="mt-4">Shipping Details</h3>
+    <ul class="list-unstyled">
+        <li><strong>Address Line 1:</strong> @Model.AddressLine1</li>
+        <li><strong>Address Line 2:</strong> @Model.AddressLine2</li>
+        <li><strong>City:</strong> @Model.City</li>
+        <li><strong>State:</strong> @Model.State</li>
+        <li><strong>Postal Code:</strong> @Model.PostalCode</li>
+        <li><strong>Country:</strong> @Model.Country</li>
+    </ul>
+
+    <!-- Order Items Table -->
+    <h3 class="mt-4">Order Items</h3>
+    <table class="table table-bordered table-striped">
+        <thead class="table-light">
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderItems)
+            {
+                <tr>
+                    <td>@item.Product.Name</td>
+                    <td>$@item.Price</td>
+                    <td>@item.Quantity</td>
+                    <td>$@(item.Quantity * item.Price)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- Back to Cart Button -->
+    <div class="text-center mt-4">
+        <a href="/Customer/Cart" class="btn btn-secondary">Back to Cart</a>
+    </div>
+</div>
+
+@functions {
+    // Helper method to get appropriate badge class based on order status
+    public string GetOrderStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Pending" => "badge-warning",
+            "Shipped" => "badge-info",
+            "Delivered" => "badge-success",
+            "Cancelled" => "badge-danger",
+            _ => "badge-secondary"
+        };
+    }
+}
+
+<style>
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+    .table th {
+        background-color: #f8f9fa;
+        color: #495057;
+    }
+
+    .badge {
+        font-size: 0.875rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 1rem;
+    }
+
+    /* Badge color based on status */
+    .badge-warning {
+        background-color: #ffc107;
+    }
+
+    .badge-info {
+        background-color: #17a2b8;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+    }
+
+    .badge-danger {
+        background-color: #dc3545;
+    }
+
+    .alert {
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .list-unstyled li {
+        font-size: 1rem;
+        margin-bottom: 5px;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+</style>

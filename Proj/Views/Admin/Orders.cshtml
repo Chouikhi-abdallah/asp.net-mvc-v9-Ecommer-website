@@ -1,0 +1,93 @@
+@model List<Proj.Models.Order>
+
+<div class="container mt-4">
+    <h2 class="mb-4">Order Details</h2>
+
+    @foreach (var order in Model)
+    {
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">Order #@order.Id</h5>
+            <p><strong>User:</strong> @order.User.Name</p>
+            <p><strong>Status:</strong> @order.OrderStatus</p>
+
+            <form method="post" asp-action="UpdateOrderStatus">
+                <input type="hidden" name="id" value="@order.Id" />
+                <div class="form-group">
+                    <label for="orderStatus">Change Status</label>
+                    <select id="orderStatus" name="orderStatus" class="form-control">
+                        <option value="Pending" selected="@((order.OrderStatus == "Pending") ? "selected" : "")">Pending</option>
+                        <option value="Shipped" selected="@((order.OrderStatus == "Shipped") ? "selected" : "")">Shipped</option>
+                        <option value="Delivered" selected="@((order.OrderStatus == "Delivered") ? "selected" : "")">Delivered</option>
+                        <option value="Cancelled" selected="@((order.OrderStatus == "Cancelled") ? "selected" : "")">Cancelled</option>
+
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3">Update Status</button>
+            </form>
+        </div>
+    </div>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+    <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+    <div class="alert alert-danger mt-3">@TempData["ErrorMessage"]</div>
+    }
+</div>
+
+<style>
+    .card {
+        border-radius: 8px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .btn {
+        border-radius: 4px;
+        padding: 10px 15px;
+    }
+
+    .form-control {
+        border-radius: 4px;
+    }
+
+    .alert {
+        border-radius: 4px;
+        font-weight: bold;
+    }
+
+    .container {
+        max-width: 1200px;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .btn-primary {
+        width: 100%;
+    }
+
+    .alert-success {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .alert-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+</style>
