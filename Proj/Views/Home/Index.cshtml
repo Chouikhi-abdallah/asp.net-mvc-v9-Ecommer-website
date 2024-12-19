@@ -1,5 +1,5 @@
 ﻿@{
-ViewData["Title"] = "Welcome to Our Store";
+    ViewData["Title"] = "Welcome to Our Store";
 }
 
 <!-- Top Navbar -->
@@ -11,39 +11,46 @@ ViewData["Title"] = "Welcome to Our Store";
                     <h5 class="brand-name">AC E-COMMERCE</h5>
                 </div>
                 <div class="col-md-5 my-auto">
-                    <form role="search">
-                        <div class="input-group">
-                            <input type="search" placeholder="Search your product" class="form-control" />
-                            <button class="btn bg-white" type="submit">
-                                <i class="fa fa-search"></i>
-                            </button>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <!-- Product Name Filter -->
+                            <form method="get" action="@Url.Action("Filter")" role="search">
+                                <div class="input-group">
+                                    <input type="search" name="productName" class="form-control" placeholder="Search by product name" value="@ViewData["productName"]" />
+                                    <button class="btn bg-white" type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
+
+                        <div class="col-md-6">
+                            <!-- Price Range Filter -->
+                            <form method="get" action="@Url.Action("Filter")" role="search">
+                                <div class="input-group">
+                                    <!-- Min Price Filter -->
+                                    <input type="number" name="minPrice" class="form-control" placeholder="Min Price" value="@ViewData["minPrice"]" />
+                                    <!-- Max Price Filter -->
+                                    <input type="number" name="maxPrice" class="form-control" placeholder="Max Price" value="@ViewData["maxPrice"]" />
+                                    <button class="btn bg-white" type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-5 my-auto">
                     <ul class="nav justify-content-end">
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <i class="fa fa-shopping-cart"></i> Cart (0)
+                            <a class="btn btn-secondary me-2" href="/Account/Login">
+                                <i class="fa fa-sign-in-alt"></i> Login
                             </a>
                         </li>
-                        
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="/Account/Login" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa fa-user"></i> Login
+                        <li class="nav-item">
+                            <a class="btn btn-secondary" href="/Account/Register">
+                                <i class="fa fa-user-plus"></i> Register
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="/Account/Login"><i class="fa fa-sign-in-alt"></i> Login</a></li>
-                                <li><a class="dropdown-item" href="/Account/Register"><i class="fa fa-user-plus"></i> Register</a></li>
-                            </ul>
-
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fa fa-list"></i> My Orders</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fa fa-heart"></i> My Wishlist</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fa fa-shopping-cart"></i> My Cart</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fa fa-sign-out"></i> Logout</a></li>
-                            </ul>
                         </li>
                     </ul>
                 </div>
@@ -58,9 +65,27 @@ ViewData["Title"] = "Welcome to Our Store";
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">All Categories</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Featured Products</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Home/Index">Home</a></li>
+                    <li class="nav-item dropdown position-static">
+                        <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            All Categories
+                        </a>
+                        <div class="dropdown-menu w-100 shadow">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    @foreach (var category in ViewBag.categories)
+                                    {
+                                        <div class="col-md-3">
+                                            <a href="/Home/Category/@category.Id" class="dropdown-item">@category.Name</a>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Home/FeaturedProducts">Featured Products</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -75,59 +100,45 @@ ViewData["Title"] = "Welcome to Our Store";
 
 <!-- Products Section -->
 <div id="products" class="container mt-5">
-    <h2 class="text-center mb-4">Featured Products</h2>
     <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
-        @foreach (var product in Model)
+        @foreach (var product in ViewBag.products)
         {
-        <div class="col">
-            <div class="card shadow-sm border-light rounded">
-                <img src="@product.ImagePath" class="card-img-top" alt="@product.Name" style="height: 200px; object-fit: cover;">
-                <div class="card-body">
-                    <h5 class="card-title">@product.Name</h5>
-                    <p class="card-text" style="font-size: 0.9rem;">
-                        @if (product.Description.Length > 100)
-                        {
-                        @product.Description.Substring(0, 100)
-                        }
-                        else
-                        {
-                        @product.Description
-                        }
-                    </p>
-                    <p class="card-text"><strong>Price:</strong> $@product.Price</p>
-                    <form method="post" action="@Url.Action("AddToCart", "Customer")">
-                        <input type="hidden" name="productId" value="@product.Id" />
-                        <input type="number" name="quantity" value="1" min="1" class="form-control mb-2" />
-                        <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
-                    </form>
+            <div class="col">
+                <div class="card shadow-sm border-light rounded position-relative">
+                    <!-- Stock Status -->
+                    @if (product.Quantity == 0)
+                    {
+                    <span class="badge position-absolute top-0 end-0 m-2 bg-danger text-white">Out of Stock</span>
+                    }
+                    else if (product.Quantity == 1)
+                    {
+                    <span class="badge position-absolute top-0 end-0 m-2 bg-warning text-dark">Last Product</span>
+                    }
+                    else
+                    {
+                    <span class="badge position-absolute top-0 end-0 m-2 bg-success text-white">In Stock</span>
+                    }
+
+                    <img src="@product.ImagePath" class="card-img-top" alt="@product.Name" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text" style="font-size: 0.9rem;">
+                            @if (product.Description.Length > 100)
+                            {
+                            @product.Description.Substring(0, 100)
+                            }
+                            else
+                            {
+                            @product.Description
+                            }
+                        </p>
+                        <p class="card-text"><strong>Price:</strong> $@product.Price</p>
+                    </div>
                 </div>
             </div>
-        </div>
         }
     </div>
 </div>
-
-<!-- Login Prompt Modal -->
-@if (TempData["LoginPrompt"] != null)
-{
-<div class="modal fade" id="loginPromptModal" tabindex="-1" aria-labelledby="loginPromptModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="loginPromptModalLabel">Login Required</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                @TempData["LoginPrompt"]
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <a href="/Account/Login" class="btn btn-primary">Login</a>
-            </div>
-        </div>
-    </div>
-</div>
-}
 
 <!-- Footer Section -->
 <div class="footer-area mt-5">
@@ -137,7 +148,7 @@ ViewData["Title"] = "Welcome to Our Store";
                 <h4 class="footer-heading">AC E-Commerce</h4>
                 <div class="footer-underline"></div>
                 <p>
-                    This is an E Commerce website made by the legend Chouikhi abdallah the king in the south  the unbreackable the auror protoctor of the seven kingdom
+                    This is an E-Commerce website made by Chouikhi Abdallah, the protector of the seven kingdoms.
                 </p>
             </div>
             <div class="col-md-3">
@@ -146,8 +157,6 @@ ViewData["Title"] = "Welcome to Our Store";
                 <div class="mb-2"><a href="#" class="text-white">Home</a></div>
                 <div class="mb-2"><a href="#" class="text-white">About Us</a></div>
                 <div class="mb-2"><a href="#" class="text-white">Contact Us</a></div>
-                <div class="mb-2"><a href="#" class="text-white">Blogs</a></div>
-                <div class="mb-2"><a href="#" class="text-white">Sitemaps</a></div>
             </div>
             <div class="col-md-3">
                 <h4 class="footer-heading">Shop Now</h4>
@@ -196,20 +205,6 @@ ViewData["Title"] = "Welcome to Our Store";
         </div>
     </div>
 </div>
-
-
-
-<script>
-    // Show the login prompt modal if it exists
-    $(document).ready(function () {
-        if ('@TempData["LoginPrompt"]' != '') {
-            $('#loginPromptModal').modal('show');
-        }
-    });
-</script>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <style>
     .main-navbar {
         border-bottom: 1px solid #ccc;
