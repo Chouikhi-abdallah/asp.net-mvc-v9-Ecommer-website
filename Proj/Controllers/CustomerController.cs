@@ -212,5 +212,27 @@ namespace Proj.Controllers
             TempData["OrderConfirmation"] = "Your order has been placed successfully!";
             return RedirectToAction("CustomerHome");
         }
+        public IActionResult OrderHistory()
+        {
+            var userIdString = HttpContext.Session.GetString("UserId"); // Get the UserId from the session
+            if (string.IsNullOrEmpty(userIdString))
+            {
+                return RedirectToAction("Login", "Account"); // Redirect to login if the user is not logged in
+            }
+
+            var userId = int.Parse(userIdString); // Convert userId from string to int
+
+            var orderHistory = _context.Orders
+                .Where(o => o.UserId == userId)
+                .OrderByDescending(o => o.OrderDate) // Sort orders by OrderDate in descending order
+                .Include(o => o.OrderItems) // Include order items
+                .ThenInclude(oi => oi.Product) // Ensure the related Product is loaded for each OrderItem
+                .ToList();
+
+            return View(orderHistory);
+        }
+
+
+        
     }
 }
