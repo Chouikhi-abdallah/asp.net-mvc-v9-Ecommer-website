@@ -1,10 +1,15 @@
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Proj.Data;
+using Proj.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 builder.Services.AddControllersWithViews();
+var cultureInfo = new CultureInfo("en-US");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 // Configure Entity Framework and the database context
 builder.Services.AddDbContext<EcommerceDbContext>(options =>
@@ -20,6 +25,12 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true; // Secure session cookie
     options.Cookie.IsEssential = true; // Make the session cookie essential for GDPR compliance
 });
+
+// Add the Stripe payment service
+builder.Services.AddSingleton<StripePaymentService>();
+
+// Add the MailService
+builder.Services.AddSingleton<MailService>(); // Register MailService as a singleton
 
 // Build the app
 var app = builder.Build();
