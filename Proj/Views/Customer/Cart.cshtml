@@ -1,71 +1,103 @@
 @{
-ViewData["Title"] = "Your Cart";
+    ViewData["Title"] = "Your Cart";
 }
 
 <div class="container mt-5">
-    <h2 class="mb-4">Your Shopping Cart</h2>
+    <div class="text-center mb-4">
+        <h1 class="display-4 fw-bold text-primary">Your Shopping Cart</h1>
+        <p class="text-muted">Review your selected items and proceed to checkout when you're ready.</p>
+    </div>
 
     <!-- Check if the cart is empty -->
     @if (Model == null)
     {
-    <div class="alert alert-info">Your cart is empty. Add some items to your cart!</div>
+        <div class="alert alert-info text-center py-5">
+            <i class="fa fa-shopping-cart fa-3x mb-3 text-primary"></i>
+            <h4>Your cart is empty!</h4>
+            <p class="text-muted">Add some items to start shopping.</p>
+            <a href="/Customer/CustomerHome" class="btn btn-primary mt-3">Continue Shopping</a>
+        </div>
     }
     else
     {
-    <!-- Cart Table -->
-    <table class="table table-bordered table-striped">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col">Product</th>
-            <th scope="col">Price</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Total</th>
-            <th scope="col">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var cartItem in Model)
-        {
-        <tr>
-            <td>
-                <img src="@cartItem.Product?.ImagePath" class="img-fluid" style="max-width: 50px;" alt="@cartItem.Product?.Name" />
-                @cartItem.Product?.Name
-            </td>
-            <td>@cartItem.Product?.Price</td>
-            <td>
-                <form method="post" action="@Url.Action("UpdateCartItem", "Customer")" class="d-inline">
-                    <input type="hidden" name="cartItemId" value="@cartItem.Id" />
-                    <button type="submit" name="increase" value="false" class="btn btn-sm btn-secondary"><i class="fa fa-minus"></i></button>
-                </form>
-                @cartItem.Quantity
-                <form method="post" action="@Url.Action("UpdateCartItem", "Customer")" class="d-inline">
-                    <input type="hidden" name="cartItemId" value="@cartItem.Id" />
-                    <button type="submit" name="increase" value="true" class="btn btn-sm btn-secondary"><i class="fa fa-plus"></i></button>
-                </form>
-            </td>
-            @{
-                var x = @cartItem.Product?.Price;
-                var y = @cartItem.Quantity;
-                var res = x * y;
-                
-            }
-            <td>@res</td>
-            <td>
-                <form method="post" action="@Url.Action("RemoveFromCart", "Customer")" class="d-inline">
-                    <input type="hidden" name="cartItemId" value="@cartItem.Id" />
-                    <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Remove</button>
-                </form>
-            </td>
-        </tr>
-        }
-        </tbody>
-    </table>
+        <div class="row">
+            <!-- Cart Table -->
+            <div class="col-12">
+                <div class="table-responsive shadow-sm rounded">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-primary">
+                            <tr>
+                                <th scope="col">Product</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Total</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var cartItem in Model)
+                            {
+                                <tr class="align-middle">
+                                    <td class="d-flex align-items-center">
+                                        <img src="@cartItem.Product?.ImagePath" alt="@cartItem.Product?.Name" class="img-fluid rounded me-3" style="width: 60px; height: 60px; object-fit: cover;" />
+                                        <span class="fw-bold">@cartItem.Product?.Name</span>
+                                    </td>
+                                    <td class="text-primary fw-bold">$@cartItem.Product?.Price</td>
+                                    <td class="text-center">
+                                        <form method="post" action="@Url.Action("UpdateCartItem", "Customer")" class="d-inline">
+                                            <input type="hidden" name="cartItemId" value="@cartItem.Id" />
+                                            <button type="submit" name="increase" value="false" class="btn btn-sm btn-outline-secondary">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </form>
+                                        <span class="mx-2 fw-bold">@cartItem.Quantity</span>
+                                        <form method="post" action="@Url.Action("UpdateCartItem", "Customer")" class="d-inline">
+                                            <input type="hidden" name="cartItemId" value="@cartItem.Id" />
+                                            <button type="submit" name="increase" value="true" class="btn btn-sm btn-outline-secondary">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td class="text-success fw-bold">$@(cartItem.Product?.Price * cartItem.Quantity)</td>
+                                    <td>
+                                        <form method="post" action="@Url.Action("RemoveFromCart", "Customer")">
+                                            <input type="hidden" name="cartItemId" value="@cartItem.Id" />
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="fa fa-trash"></i> Remove
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-    <!-- Total Price -->
-    <div class="d-flex justify-content-between">
-        <h4>Total: $@ViewBag.Total</h4>
-        <a href="/Customer/Checkout" class="btn btn-primary">Proceed to Checkout</a>
-    </div>
+        <!-- Total Price Section -->
+        <div class="row mt-4">
+            <div class="col-md-6 offset-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="text-center fw-bold mb-4">Order Summary</h4>
+                        <div class="d-flex justify-content-between">
+                            <h5>Total:</h5>
+                            <h5 class="text-primary">$@ViewBag.Total</h5>
+                        </div>
+                        <hr />
+                        <div class="d-grid gap-2">
+                            <a href="/Customer/Checkout" class="btn btn-success btn-lg">
+                                <i class="fa fa-credit-card"></i> Proceed to Checkout
+                            </a>
+                            <a href="/Customer/CustomerHome" class="btn btn-outline-secondary">
+                                <i class="fa fa-arrow-left"></i> Continue Shopping
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
 </div>
 
