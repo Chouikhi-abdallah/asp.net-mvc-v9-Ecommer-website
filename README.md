@@ -55,7 +55,7 @@ Before setting up the project, ensure you have the following installed on your l
 To start using the project, first, clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/e-commerce-project.git
+git clone https://github.com/Chouikhi-abdallah/asp.net-mvc-v9-Ecommerce-website
 cd proj
 ```
 ### 2. Install dependencies
