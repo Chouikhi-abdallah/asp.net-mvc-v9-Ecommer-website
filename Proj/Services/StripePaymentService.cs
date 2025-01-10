@@ -6,7 +6,7 @@ public class StripePaymentService
 {
     public StripePaymentService()
     {
-        StripeConfiguration.ApiKey = "sk_test_51QVhqBAL3cisUWy3XF6Ne7HSN9mFkudY1kq3M76WDDqy0xLkJ0duEa2QCk2c4YZyuB3kBlEZ2HcNji5FP25wnKzh007WvFwLaE";
+        StripeConfiguration.ApiKey = "lorum ipsum xx jj "; // Replace this with you actual api key 
     }
 
     public Session CreateCheckoutSession(decimal totalAmount, string successUrl, string cancelUrl)
